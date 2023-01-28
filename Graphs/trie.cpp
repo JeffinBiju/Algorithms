@@ -2,63 +2,64 @@
 #include <bits/stdc++.h>
 #include <unordered_set>
 #include <unordered_map>
+#include <cmath>
 #define ll long long
+#define mod (998244353)
 #define inf 9223372036854775807
-#define minf -9223372036854775808
-#define mod 1000000007
+//#define minf -9223372036854775808
+#define minf -1e17
 //#define endl "\n"
-//#include "stdc++.h"
+#define pb push_back
+#define mk make_pair
 using namespace std;
 
-struct node{
-    node* c[26];
-    bool end;
-    node(){
-        for(ll i=0;i<26;i++)
-        c[i]=NULL;
-        end=0;
-    }
-};
+ll cur=1;
+vector<vector<ll> > adj; //trie
+vector<ll> v;   //value at each node in trie. Used for deleting strings etc.
 
-void insert(node* root,string &s){
-    for(ll i=0;i<s.size();i++){
-        ll id=s[i]-'a';
-        if(!root->c[id])
-        root->c[id]=new node;
-        root=root->c[id];
+void add(string &s, ll i, ll p){
+    v[p]++;
+    if(i>=s.size())
+    return;
+    if(adj[p][s[i]-'a']!=-1){
+        add(s,i+1,adj[p][s[i]-'a']);
     }
-    root->end=1;
+    else{
+        adj[p][s[i]-'a']=cur;
+        cur++;
+        add(s,i+1,adj[p][s[i]-'a']);
+    }
 }
 
-bool search(node* root,string &s){
-    for(ll i=0;i<s.size();i++){
-        ll id=s[i]-'a';
-        if(!root->c[id])
-        return 0;
-        root=root->c[id];
+ll search(string &s, ll i, ll p){
+    if(i>=s.size())
+    return i;
+    if(adj[p][s[i]-'a']!=-1 && v[adj[p][s[i]-'a']]>1){
+        return search(s,i+1,adj[p][s[i]-'a']);
     }
-    if(root->end)
-    return 1;
-    return 0;
+    else{
+        return i;
+    }
+    return i;
 }
 
 void solve(){
-    node* root=new node;
-    ll q;
-    cin>>q;
-    for(ll i=0;i<q;i++){
-        ll temp;
-        string s;
-        cin>>temp>>s;
-        if(temp==0){
-            insert(root,s);
-        }
-        else{
-            if(search(root,s))
-            cout<<"YES"<<endl;
-            else
-            cout<<"NO"<<endl;
-        }
+    ll n;
+    cin>>n;
+    vector<string> temp(n);
+    ll sum=0;
+    for(ll i=0;i<n;i++){
+        cin>>temp[i];
+        sum+=temp[i].size();
+    }
+    adj.resize(sum+5,vector<ll>(26,-1));
+    v.resize(sum+5,0);
+    for(ll i=0;i<n;i++){
+        add(temp[i],0,0);
+    }
+    for(ll i=0;i<n;i++){
+        ll x=search(temp[i],0,0);
+        cout<<x<<endl;
     }
 }
 
@@ -71,5 +72,7 @@ int main(){
 } 
  
  
+
+
 
 

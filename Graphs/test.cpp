@@ -7,7 +7,7 @@
 #define inf 9223372036854775807
 #define minf -9223372036854775808
 #define mod (1000*1000*1000+7)
-#define endl "\n"
+//#define endl "\n"
 #define pb push_back
 #define mk make_pair
 using namespace std;
@@ -153,21 +153,83 @@ void bfs(ll u,vector<vector<ll> >&adj,vector<ll> &dist){
     return;
 }
 void solve(){
-    
+    ll n;
+    cin>>n;
+    vector<ll> v(1LL<<n);
+    for(ll i=0;i<1LL<<n;i++){
+        v[i]=i+1;
+    }
+    while(1==1){
+        vector<ll> u;
+        if(v.size()==1){
+            cout<<"! "<<v[0]<<endl;
+            return;
+        }
+        if(v.size()==2){
+            cout<<"? "<<v[0]<<" "<<v[1]<<endl;
+            ll temp;
+            cin>>temp;
+            if(temp==1){
+                cout<<"! "<<v[0]<<endl;
+            }
+            else{
+                cout<<"! "<<v[1]<<endl;
+            }
+            return;
+        }
+        for(ll i=0;i<v.size();i+=4){
+            cout<<"? "<<v[i]<<" "<<v[i+2]<<endl;
+            ll temp;
+            cin>>temp;
+            if(temp==1){
+                cout<<"? "<<v[i]<<" "<<v[i+3]<<endl;
+                cin>>temp;
+                if(temp==1){
+                    u.push_back(v[i]);
+                }
+                else{
+                    u.push_back(v[i+3]);
+                }
+            }
+            else if(temp==2){
+                cout<<"? "<<v[i+1]<<" "<<v[i+2]<<endl;
+                cin>>temp;
+                if(temp==1){
+                    u.push_back(v[i+1]);
+                }
+                else{
+                    u.push_back(v[i+2]);
+                }
+            }
+            else if(temp==0){
+                cout<<"? "<<v[i+1]<<" "<<v[i+3]<<endl;
+                cin>>temp;
+                if(temp==1){
+                    u.push_back(v[i+1]);
+                }
+                else{
+                    u.push_back(v[i+3]);
+                }
+            }
+        }
+        v.clear();
+        for(auto x:u)
+        v.push_back(x);
+    }
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
- 
-    ll n1=5e5;
+
+    /*ll n1=5e5;
     fact.resize(n1+1);
     factorial(n1);
 
     invfact.resize(n1+1);
     invfact[n1]=inv(fact[n1]);
     for(ll i=n1-1;i>=0;i--)
-    invfact[i]=(invfact[i+1]*((i+1)%mod))%mod;
+    invfact[i]=(invfact[i+1]*((i+1)%mod))%mod;*/
 
     /*ll n2=1000;
     find_primes(n2);
